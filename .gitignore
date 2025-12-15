@@ -65,3 +65,7 @@ htmlcov/
 
 # pytest
 .pytest_cache/
+
+# Archived utility scripts
+scripts/
+

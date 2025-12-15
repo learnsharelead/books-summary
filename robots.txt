@@ -1,0 +1,13 @@
+# BookWise Robots.txt
+# Generated: 2025-12-15
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://bookwise.app/sitemap.xml
+
+# Crawl-delay (optional, for polite crawling)
+Crawl-delay: 1
