@@ -1,50 +1,84 @@
 """
 Seed database with World-Class rich book summaries.
 Updated to include Analogies, Action Steps, Quotes, and Executive Summaries.
+
+SAFE SEEDING: Does NOT drop existing data. Uses upsert pattern.
 """
 
 from sqlalchemy.orm import Session
 from database.connection import get_session, engine
 from database.models import Base, Genre, Book, Summary, SummaryImage
 import json
+import sys
 
-# Drop tables to ensure clean schema update
-Base.metadata.drop_all(bind=engine)
+# Create tables only if they don't exist (SAFE - never drops data)
 Base.metadata.create_all(bind=engine)
 
-def seed_data():
+
+def get_or_create_genre(db: Session, name: str, slug: str, icon: str, description: str) -> Genre:
+    """Get existing genre or create new one (upsert pattern)."""
+    existing = db.query(Genre).filter(Genre.slug == slug).first()
+    if existing:
+        return existing
+    
+    genre = Genre(name=name, slug=slug, icon=icon, description=description)
+    db.add(genre)
+    db.commit()
+    return genre
+
+
+def book_exists(db: Session, slug: str) -> bool:
+    """Check if a book already exists."""
+    return db.query(Book).filter(Book.slug == slug).first() is not None
+
+
+def seed_data(force: bool = False):
+    """
+    Seed the database with initial data.
+    
+    Args:
+        force: If True, will add books even if they exist (updates them)
+    """
     db = get_session()
     
-    print("🌱 Seeding Genres...")
-    genres = [
-        Genre(name="Self-Help", slug="self-help", icon="🌱", description="Books for personal growth and improvement."),
-        Genre(name="Business", slug="business", icon="💼", description="Strategy, leadership, and entrepreneurship."),
-        Genre(name="Psychology", slug="psychology", icon="🧠", description="Understanding the human mind and behavior."),
-        Genre(name="Finance", slug="finance", icon="💰", description="Money management and investing wisdom."),
-        Genre(name="Productivity", slug="productivity", icon="⚡", description="Optimization and time management."),
-        Genre(name="Philosophy", slug="philosophy", icon="🤔", description="Timeless wisdom and critical thinking."),
-        Genre(name="History", slug="history", icon="🏺", description="The story of humanity and civilization."),
+    print("🌱 Seeding Genres (safe upsert)...")
+    genre_data = [
+        ("Self-Help", "self-help", "🌱", "Books for personal growth and improvement."),
+        ("Business", "business", "💼", "Strategy, leadership, and entrepreneurship."),
+        ("Psychology", "psychology", "🧠", "Understanding the human mind and behavior."),
+        ("Finance", "finance", "💰", "Money management and investing wisdom."),
+        ("Productivity", "productivity", "⚡", "Optimization and time management."),
+        ("Philosophy", "philosophy", "🤔", "Timeless wisdom and critical thinking."),
+        ("History", "history", "🏺", "The story of humanity and civilization."),
     ]
-    db.add_all(genres)
-    db.commit()
     
-    genre_map = {g.slug: g for g in genres}
+    genre_map = {}
+    for name, slug, icon, desc in genre_data:
+        genre_map[slug] = get_or_create_genre(db, name, slug, icon, desc)
     
     print("📚 Seeding Books & Summaries...")
     
     # helper for creating full content
     def create_content(title, author, genre_slug, cover_url, year, summary_data):
+        slug = title.lower().replace(" ", "-").replace(":", "").replace("'", "")
+        
+        # Skip if book already exists (unless force mode)
+        if book_exists(db, slug) and not force:
+            print(f"  ⏭️  Skipping existing: {title}")
+            return
+        
         book = Book(
             title=title,
             author=author,
-            slug=title.lower().replace(" ", "-").replace(":", "").replace("'", ""),
+            slug=slug,
             cover_image_url=cover_url,
             publication_year=year,
             genre=genre_map[genre_slug],
             is_featured=True
         )
         db.add(book)
-        db.commit() # commit to get ID
+        db.commit()  # commit to get ID
+        print(f"  ✅ Added: {title}")
         
         summary = Summary(
             book_id=book.id,

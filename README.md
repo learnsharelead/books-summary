@@ -42,6 +42,25 @@ A production-ready, SEO-optimized book summary website built with Streamlit feat
 | 📖 Progress Tracker | Reading progress per book |
 | 📚 Related Books | "More in [Genre]" recommendations |
 
+### 🤖 AI-Powered Features (NEW!)
+| Feature | Description |
+|---------|-------------|
+| 🎧 Audio Summaries | Text-to-speech with browser's Web Speech API - works offline! |
+| 💬 AI Book Chat | RAG-powered conversations with any book using Gemini |
+| 🎯 Smart Recommendations | Content-based filtering with keyword similarity scoring |
+| 🧠 Quiz Generation | AI-generated quizzes to test understanding |
+| 📝 Personalized Insights | Context-aware explanations and applications |
+
+### 📱 Scale & Performance
+| Feature | Description |
+|---------|-------------|
+| 📲 PWA Support | Installable web app with offline support |
+| 📊 Analytics Dashboard | Admin dashboard with KPIs, charts, and insights |
+| ⚡ Performance Utils | Advanced caching, lazy loading, query optimization |
+| 🌙 Dark Mode | Full dark theme support with toggle |
+| 📄 Pagination | Configurable pagination for category pages |
+| 🗄️ Safe Seeding | Upsert pattern - never drops existing data |
+
 ## 🚀 Quick Start
 
 ```bash

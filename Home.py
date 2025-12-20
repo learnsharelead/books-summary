@@ -1,5 +1,5 @@
 """
-BookWise - Compact Homepage with Readable Fonts
+BookWise - Compact Homepage with Theme Support & PWA
 """
 
 import streamlit as st
@@ -10,6 +10,8 @@ from components.footer import render_footer
 from components.reading_lists import READING_LISTS
 from components.book_of_day import render_book_of_the_day
 from components.testimonials import render_stats_with_social_proof
+from components.theme import render_global_styles, get_theme_colors, get_genre_color, COLORS
+from components.pwa import inject_pwa_support, render_offline_indicator
 
 @st.cache_data(ttl=300)
 def get_genre_book_counts():
@@ -18,20 +20,15 @@ def get_genre_book_counts():
 
 st.set_page_config(page_title="BookWise", page_icon="📚", layout="wide", initial_sidebar_state="collapsed")
 
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap');
-#MainMenu, footer, header {visibility: hidden;}
-[data-testid="stSidebarNav"] {display: none;}
-.block-container {padding: 0 !important; max-width: 100% !important;}
-body {font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b;}
-div.stButton > button {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; transition: all 0.2s ease;}
-div.stButton > button:hover {transform: translateY(-1px);}
-input[type="text"] {border: 1px solid #e2e8f0 !important; border-radius: 8px !important; padding: 8px 12px !important; font-size: 14px !important;}
-.hover-lift {transition: all 0.2s ease;}
-.hover-lift:hover {transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);}
-</style>
-""", unsafe_allow_html=True)
+# Apply centralized theme styles
+render_global_styles()
+
+# PWA Support
+inject_pwa_support()
+render_offline_indicator()
+
+# Get theme-aware colors
+c = get_theme_colors()
 
 render_navigation(active_page="Home")
 

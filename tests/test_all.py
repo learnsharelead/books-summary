@@ -147,13 +147,13 @@ class TestComponents:
     def test_theme_imports(self):
         """Test theme component imports"""
         from components.theme import (
-            init_theme,
-            get_current_theme,
+            get_theme,
+            set_theme,
             toggle_theme,
-            get_theme_css
+            generate_global_css
         )
-        css = get_theme_css()
-        assert "<style>" in css
+        css = generate_global_css()
+        assert len(css) > 100
         print("✅ theme: CSS generated")
     
     def test_newsletter_imports(self):

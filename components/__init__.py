@@ -13,8 +13,9 @@ from components.discovery import (
     add_bookmark, remove_bookmark, is_bookmarked
 )
 from components.theme import (
-    init_theme, get_current_theme, toggle_theme,
-    render_theme_toggle, get_theme_css, apply_theme
+    get_theme, set_theme, toggle_theme,
+    render_theme_toggle, render_global_styles, get_theme_colors,
+    get_genre_color, COLORS, TYPOGRAPHY, SPACING, LAYOUT
 )
 from components.newsletter import render_newsletter_signup, get_subscriber_count
 from components.reading_lists import get_reading_lists, render_reading_lists_section
@@ -29,6 +30,10 @@ from components.book_of_day import render_book_of_the_day, get_book_of_the_day
 from components.quick_actions import render_quick_actions, render_scroll_to_top, render_action_bar
 from components.testimonials import render_testimonials, render_stats_with_social_proof
 from components.genre_themes import get_genre_theme, get_genre_gradient, apply_genre_theme_css
+from components.pagination import (
+    paginate_items, render_pagination, render_compact_pagination,
+    PaginationConfig, reset_pagination
+)
 
 __all__ = [
     # SEO
@@ -47,8 +52,9 @@ __all__ = [
     "render_compact_share_buttons", "render_bookmarks_sidebar",
     "add_bookmark", "remove_bookmark", "is_bookmarked",
     # Theme
-    "init_theme", "get_current_theme", "toggle_theme",
-    "render_theme_toggle", "get_theme_css", "apply_theme",
+    "get_theme", "set_theme", "toggle_theme",
+    "render_theme_toggle", "render_global_styles", "get_theme_colors",
+    "get_genre_color", "COLORS", "TYPOGRAPHY", "SPACING", "LAYOUT",
     # Newsletter
     "render_newsletter_signup", "get_subscriber_count",
     # Reading Lists
