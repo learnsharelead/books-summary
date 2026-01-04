@@ -39,6 +39,7 @@ venv/
 
 # Database
 data/*.db
+!data/bookwise.db
 data/*.db-journal
 *.sqlite
 *.sqlite3
